@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+       api:
+           build: .
+           networks:
+              - web
+           labels:
+              - "traefik.enable=true"
+              - "traefik.backend=api"
+              - "traefik.docker.network=web"
+              - "traefik.frontend.rule=Host:api.pbfp.xyz"
+              - "traefik.port=3000"
+           volumes:
+              - "./data:/usr/src/app/data/"
+networks:
+    web:
+       external: true
+
