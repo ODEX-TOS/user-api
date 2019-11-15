@@ -6,11 +6,11 @@ module.exports = function(app){
         var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         let saved = await manipulator.write(req.query.hostname, req.query.version, req.query.mac, ip);
         if (saved == manipulator.SAVED)
-            res.send("Saved statistics")
+            res.send({state:"Saved statistics"})
         if (saved == manipulator.EXISTS)
-            res.send("Data is already present")
+            res.send({state:"Data is already present"})
         if (saved == manipulator.ERROR)
-            res.send("Error uploading statistics")
+            res.send({state:"Error uploading statistics"})
     });
 
     app.get('/api/v1/user/dump', async function (req, res){
