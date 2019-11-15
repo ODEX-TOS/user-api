@@ -1,7 +1,7 @@
 const fs = require('fs')
 const readline = require('readline');
 
-const file = "users.db"
+const file = "data/users.db"
 
 const SAVED = 1;
 const EXISTS = 2;
