@@ -55,7 +55,6 @@ async function exists(user, version) {
                             return line.includes(entry);
                     });
                     lines = lines.filter(filterByDate);
-                    console.log(lines)
                     resolve(lines.length !== 0);
                 });
         });
@@ -64,12 +63,10 @@ async function exists(user, version) {
 async function removeOldEntries (user, version){
     return new Promise((x) => {
         let entry = user + " " + version;
-        console.log(entry + "--");
          fs.readFile(file, 'utf-8', function(err, data) {
             if (err) throw err;
             let lines = data.split("\n");
             lines = lines.filter((line) => {
-                console.log(line, line.includes(entry));
                 return ! line.includes(entry);
             });
             fs.writeFile(file, lines.join("\n"), function (err){
