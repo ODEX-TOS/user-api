@@ -4,7 +4,7 @@ module.exports = function(app){
     // expected url is api.pbfp.xyz/api/v1/user?hostname=name&version=version 
     app.get('/api/v1/user', async function (req, res) {
         var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-        let saved = await manipulator.write(req.query.hostname, req.query.version, ip);
+        let saved = await manipulator.write(req.query.hostname, req.query.version, req.query.mac, ip);
         if (saved == manipulator.SAVED)
             res.send("Saved statistics")
         if (saved == manipulator.EXISTS)

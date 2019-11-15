@@ -34,7 +34,7 @@ function append(payload) {
 function filterByDate(line){
         if (line === undefined)
                 return false;
-        let lineDate = new Date(line.split(' ')[3])
+        let lineDate = new Date(line.split(' ')[4])
         let timeout = new Date()
         timeout.setMonth(timeout.getMonth()-1); // set date to previous month
         return timeout < lineDate; 
@@ -44,9 +44,9 @@ function filterByDate(line){
 // check if an entry already exists in the file
 // Each entry should be in a single line
 // looking like this <name> <version> <ip> <date>
-async function exists(user, version) {
+async function exists(mac) {
         return new Promise((resolve) => {
-                let entry = user + " " + version;
+                let entry = mac;
                 let bExists = false
                 fs.readFile(file, 'utf8', function(err, data) {
                     if (err) throw err;
@@ -60,9 +60,9 @@ async function exists(user, version) {
         });
 }
 
-async function removeOldEntries (user, version){
+async function removeOldEntries (mac){
     return new Promise((x) => {
-        let entry = user + " " + version;
+        let entry = mac;
          fs.readFile(file, 'utf-8', function(err, data) {
             if (err) throw err;
             let lines = data.split("\n");
@@ -80,13 +80,13 @@ async function removeOldEntries (user, version){
 
 // save a user to a file
 // Files are easy to manipulate and make deployment of such a simple api as this easy
-module.exports.write = async function(hostname, version, ip){
+module.exports.write = async function(hostname, version, mac, ip){
    try{
         createFile(file);
         // construct the new entry to add to the file
-        let entry = hostname + " " + version + " " + ip + " " + date();
-        if(! await exists(hostname, version)){
-            await removeOldEntries(hostname, version);
+        let entry = hostname + " " + mac + " " + version + " " + ip + " " + date();
+        if(! await exists(mac)){
+            await removeOldEntries(mac);
             append(entry);
             return SAVED;
         }
@@ -107,7 +107,7 @@ module.exports.read = async function(){
             });
             data = data.map((line) => {
                     splitted = line.split(" ");
-                    return {hostname:splitted[0], version:splitted[1], date:splitted[3] };
+                    return {hostname:splitted[0], version:splitted[2], mac:splitted[1], date:splitted[4] };
             })
             x(data);
         });
